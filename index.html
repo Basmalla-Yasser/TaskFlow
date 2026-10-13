@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="en" class="dark">
   <head>
@@ -787,16 +788,22 @@
         });
 
       function showDashboard(user) {
-        document.getElementById("login-section").classList.add("hidden");
-        document.getElementById("dashboard-section").classList.remove("hidden");
-        document.getElementById("welcome-user").innerText =
-          `Welcome, ${user.username}`;
-        document.getElementById("user-role-badge").innerText =
-          `${user.role} Access`;
-        fetchTasks();
-        fetchStats();
-        loadTeamMembersDropdown();
-        lucide.createIcons();
+        // التحقق من الصلاحيات: Leader أو Supervisor فقط يفتحون الداشبورد الكبيرة
+        if (user.role === "Leader" || user.role === "Supervisor") {
+          document.getElementById("login-section").classList.add("hidden");
+          document.getElementById("dashboard-section").classList.remove("hidden");
+          document.getElementById("welcome-user").innerText =
+            `Welcome, ${user.username}`;
+          document.getElementById("user-role-badge").innerText =
+            `${user.role} Access`;
+          fetchTasks();
+          fetchStats();
+          loadTeamMembersDropdown();
+          lucide.createIcons();
+        } else {
+          // باقي الأعضاء (مثل مريم) يتم توجيههم لصفحة تسليم التاسكات فقط
+          window.location.href = "submit_task.html";
+        }
       }
 
       function logout() {
@@ -914,8 +921,8 @@
 
           users.forEach((user) => {
             let roleBadge =
-              user.role === "Leader"
-                ? '<span class="bg-orange-500/10 text-orange-400 border border-orange-500/20 px-3 py-1 rounded-full text-xs font-bold">Leader</span>'
+              user.role === "Leader" || user.role === "Supervisor"
+                ? `<span class="bg-orange-500/10 text-orange-400 border border-orange-500/20 px-3 py-1 rounded-full text-xs font-bold">${user.role}</span>`
                 : '<span class="bg-blue-500/10 text-blue-400 border border-blue-500/20 px-3 py-1 rounded-full text-xs font-bold">Member</span>';
 
             tbody.innerHTML += `
