@@ -273,7 +273,7 @@
                 TaskFlow
               </h2>
               <p id="user-role-badge" class="text-xs font-bold text-orange-400">
-                Leader Portal
+                Portal Access
               </p>
             </div>
           </div>
@@ -789,22 +789,31 @@
       function showDashboard(user) {
         const role = (user.role || "").trim().toLowerCase();
 
-        // القادة والمشرفين يفتحون الداشبورد الكاملة
+        // إظهار الداشبورد والترحيب بالمستخدم
+        document.getElementById("login-section").classList.add("hidden");
+        document.getElementById("dashboard-section").classList.remove("hidden");
+        document.getElementById("welcome-user").innerText = `Welcome, ${user.username}`;
+        document.getElementById("user-role-badge").innerText = `${user.role} Access`;
+
         if (role === "leader" || role === "supervisor") {
-          document.getElementById("login-section").classList.add("hidden");
-          document.getElementById("dashboard-section").classList.remove("hidden");
-          document.getElementById("welcome-user").innerText = `Welcome, ${user.username}`;
-          document.getElementById("user-role-badge").innerText = `${user.role} Access`;
+          // القادة والمشرفين: إظهار جميع التابات وإتاحة كل الصلاحيات
+          document.getElementById("nav-tasks").classList.remove("hidden");
+          document.getElementById("nav-team").classList.remove("hidden");
+          document.getElementById("nav-submissions").classList.remove("hidden");
           
           fetchTasks();
           fetchStats();
           loadTeamMembersDropdown();
           switchTab("tasks");
-          lucide.createIcons();
         } else {
-          // باقي الأعضاء يتم توجيههم لصفحة تسليم التاسكات
-          window.location.href = "submit_task.html";
+          // الأعضاء العاديين (مثل مريم): إخفاء تابات القائد وفتح تبويب التسليمات فقط فوراً جوه نفس الصفحة
+          document.getElementById("nav-tasks").classList.add("hidden");
+          document.getElementById("nav-team").classList.add("hidden");
+          document.getElementById("nav-submissions").classList.remove("hidden");
+          
+          switchTab("submissions");
         }
+        lucide.createIcons();
       }
 
       function logout() {
