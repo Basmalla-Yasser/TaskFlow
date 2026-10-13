@@ -1,6 +1,6 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Header
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse  # <--- حطيه هنا مع الباقي
+from fastapi.responses import FileResponse
 from pydantic import BaseModel
 import psycopg2
 import smtplib
@@ -21,11 +21,11 @@ app.add_middleware(
 # بيانات الاتصال بقاعدة بيانات Supabase أونلاين
 DATABASE_URL = "postgresql://postgres.itpfvgggvxhfioxgkepl:bosy12$5F77@aws-0-eu-west-1.pooler.supabase.com:5432/postgres"
 
-# إعدادات البريد الإلكتروني الخاص بكِ (الإيميل المرسِل الجديد)
+# إعدادات البريد الإلكتروني الخاص بكِ
 SMTP_SERVER = "smtp.gmail.com"
 SMTP_PORT = 587
-SENDER_EMAIL = "basmallay30@gmail.com" 
-SENDER_PASSWORD = "fvfx sfga bplv unhv" 
+SENDER_EMAIL = "basmallay30@gmail.com"  
+SENDER_PASSWORD = "fvfx sfga bplv unhv"  
 
 def get_db_connection():
     return psycopg2.connect(DATABASE_URL)
@@ -84,6 +84,7 @@ def send_email_to_user(to_email: str, task_title: str, deadline: str, descriptio
 @app.get("/")
 def read_root():
     return FileResponse("index.html")
+
 @app.post("/login")
 def login(data: LoginRequest):
     try:
