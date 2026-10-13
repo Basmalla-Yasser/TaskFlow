@@ -1,0 +1,1045 @@
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TaskFlow - NextGen Project Portal</title>
+    <!-- Tailwind CSS & Lucide Icons -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Vanilla Tilt for 3D Interactive Effect -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
+
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            fontFamily: { sans: ["Plus Jakarta Sans", "sans-serif"] },
+          },
+        },
+      };
+    </script>
+
+    <style>
+      body {
+        font-family: "Plus Jakarta Sans", sans-serif;
+        background-color: #030712;
+        color: #f3f4f6;
+        overflow-x: hidden;
+      }
+
+      /* Ambient Background Glows */
+      .ambient-glow-1 {
+        position: absolute;
+        width: 500px;
+        height: 500px;
+        background: radial-gradient(
+          circle,
+          rgba(249, 115, 22, 0.12) 0%,
+          rgba(0, 0, 0, 0) 70%
+        );
+        top: -100px;
+        left: -100px;
+        z-index: 0;
+        pointer-events: none;
+      }
+      .ambient-glow-2 {
+        position: absolute;
+        width: 600px;
+        height: 600px;
+        background: radial-gradient(
+          circle,
+          rgba(99, 102, 241, 0.1) 0%,
+          rgba(0, 0, 0, 0) 70%
+        );
+        bottom: -150px;
+        right: -150px;
+        z-index: 0;
+        pointer-events: none;
+      }
+
+      /* Glassmorphism */
+      .glass-card {
+        background: rgba(17, 24, 39, 0.7);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+      }
+
+      .glass-input {
+        background: rgba(31, 41, 55, 0.5);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(8px);
+      }
+      .glass-input:focus {
+        border-color: #f97316;
+        box-shadow: 0 0 20px rgba(249, 115, 22, 0.25);
+      }
+
+      .neon-glow {
+        box-shadow: 0 0 25px rgba(249, 115, 22, 0.4);
+      }
+      .neon-glow:hover {
+        box-shadow: 0 0 35px rgba(249, 115, 22, 0.6);
+      }
+
+      ::-webkit-scrollbar {
+        width: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #030712;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #1f2937;
+        border-radius: 10px;
+      }
+    </style>
+  </head>
+
+  <body class="h-screen w-screen flex overflow-hidden relative select-none">
+    <div class="ambient-glow-1"></div>
+    <div class="ambient-glow-2"></div>
+
+    <!-- ================= LOGIN SECTION ================= -->
+    <div
+      id="login-section"
+      class="flex h-full w-full z-10 relative overflow-y-auto"
+    >
+      <div
+        class="max-w-7xl w-full mx-auto flex flex-col lg:flex-row items-center justify-between p-6 lg:p-12 gap-12 my-auto"
+      >
+        <!-- Left Side: Interactive 3D Showcase -->
+        <div
+          class="w-full lg:w-7/12 flex flex-col justify-center space-y-6 text-left"
+        >
+          <div>
+            <div class="flex items-center gap-3 mb-6">
+              <div
+                class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-orange-600 to-amber-500 flex items-center justify-center text-white font-black text-xl shadow-lg shadow-orange-500/30"
+              >
+                ⚡
+              </div>
+              <span
+                class="text-2xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-200 to-slate-400"
+                >TaskFlow</span
+              >
+            </div>
+
+            <div
+              class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-400 text-xs font-semibold mb-4 backdrop-blur-md"
+            >
+              <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+              AI Agent Powered Task Management
+            </div>
+
+            <h1
+              class="text-4xl lg:text-5xl font-black leading-tight tracking-tight text-white mb-4"
+            >
+              Control & Elevate Your <br />
+              <span
+                class="bg-clip-text text-transparent bg-gradient-to-r from-orange-400 via-amber-300 to-yellow-500"
+                >Graduation Project</span
+              >
+            </h1>
+            <p
+              class="text-slate-400 text-sm lg:text-base leading-relaxed max-w-lg font-normal"
+            >
+              Automated cloud workflows, secure role-based access, and AI-driven
+              deliverable auditing designed for high-performance teams.
+            </p>
+          </div>
+
+          <!-- 3D Interactive Card -->
+          <div class="pt-2">
+            <div
+              class="glass-card p-5 rounded-2xl max-w-md cursor-pointer transition-all duration-300"
+              data-tilt
+              data-tilt-max="10"
+              data-tilt-glare
+              data-tilt-max-glare="0.2"
+            >
+              <div class="flex items-center justify-between mb-3">
+                <div class="flex items-center gap-2">
+                  <div
+                    class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"
+                  ></div>
+                  <span
+                    class="text-[11px] font-bold text-slate-300 uppercase tracking-wider"
+                    >AI Agent Cloud Live</span
+                  >
+                </div>
+                <span
+                  class="text-[10px] font-mono text-orange-400 bg-orange-500/10 px-2 py-0.5 rounded-full border border-orange-500/20"
+                  >Supabase / FastAPI</span
+                >
+              </div>
+              <p class="text-slate-300 text-xs font-medium">
+                "Automated inspection of deliverables and real-time email
+                notifications."
+              </p>
+            </div>
+          </div>
+
+          <div
+            id="server-status"
+            class="text-xs text-slate-500 font-semibold flex items-center gap-2 pt-2"
+          >
+            <div class="w-2 h-2 rounded-full bg-slate-600 animate-ping"></div>
+            Checking API Connection...
+          </div>
+        </div>
+
+        <!-- Right Side: Login Form -->
+        <div class="w-full lg:w-5/12 flex justify-center lg:justify-end">
+          <div
+            class="w-full max-w-md glass-card p-8 lg:p-10 rounded-3xl border border-white/10 shadow-2xl space-y-6"
+            data-tilt
+            data-tilt-max="4"
+            data-tilt-glare="false"
+          >
+            <div>
+              <h2 class="text-2xl font-extrabold text-white tracking-tight">
+                Sign In
+              </h2>
+              <p class="text-xs text-slate-400 mt-1">
+                Enter your invitation code provided by the Team Leader.
+              </p>
+            </div>
+
+            <form id="login-form" class="space-y-5">
+              <div>
+                <label
+                  class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2"
+                  >Invitation Code</label
+                >
+                <div class="relative">
+                  <input
+                    type="text"
+                    id="invitation-code"
+                    required
+                    placeholder="e.g. LED-123"
+                    class="w-full glass-input rounded-2xl px-4 py-3 pl-11 text-sm text-white placeholder-slate-500 focus:outline-none transition"
+                  />
+                  <i
+                    data-lucide="key-round"
+                    class="w-4 h-4 text-slate-500 absolute left-4 top-3.5"
+                  ></i>
+                </div>
+              </div>
+              <button
+                type="submit"
+                class="w-full bg-gradient-to-r from-orange-600 to-amber-500 hover:from-orange-500 hover:to-amber-400 text-white font-bold py-3.5 px-4 rounded-2xl transition neon-glow flex items-center justify-center gap-2 text-sm"
+              >
+                <span>Access Portal</span>
+                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+              </button>
+              <p
+                id="error-msg"
+                class="text-rose-400 text-xs text-center hidden font-medium bg-rose-500/10 py-2 rounded-xl border border-rose-500/20"
+              >
+                Invalid invitation code. Please check with your team leader.
+              </p>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= DASHBOARD SECTION ================= -->
+    <div
+      id="dashboard-section"
+      class="hidden flex h-full w-full overflow-hidden z-10"
+    >
+      <!-- Sidebar Navigation -->
+      <aside
+        class="w-72 flex-shrink-0 glass-card border-r border-white/5 flex flex-col justify-between p-6 m-4 rounded-3xl"
+      >
+        <div class="space-y-8">
+          <div class="flex items-center gap-3.5 px-2">
+            <div
+              class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-orange-600 to-amber-500 flex items-center justify-center text-white font-black text-xl shadow-lg shadow-orange-500/30"
+            >
+              ⚡
+            </div>
+            <div>
+              <h2 class="text-white font-extrabold text-base tracking-tight">
+                TaskFlow
+              </h2>
+              <p id="user-role-badge" class="text-xs font-bold text-orange-400">
+                Leader Portal
+              </p>
+            </div>
+          </div>
+
+          <nav class="space-y-2">
+            <button
+              onclick="switchTab('tasks')"
+              id="nav-tasks"
+              class="w-full flex items-center gap-3.5 bg-gradient-to-r from-orange-600 to-amber-500 text-white px-4 py-3.5 rounded-2xl font-bold text-sm shadow-lg shadow-orange-600/20 transition"
+            >
+              <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+              <span>Tasks Board</span>
+            </button>
+            <button
+              onclick="switchTab('team')"
+              id="nav-team"
+              class="w-full flex items-center gap-3.5 text-slate-400 hover:text-white hover:bg-white/5 px-4 py-3.5 rounded-2xl font-semibold text-sm transition"
+            >
+              <i data-lucide="users" class="w-5 h-5"></i>
+              <span>Team Members</span>
+            </button>
+            <button
+              onclick="switchTab('submissions')"
+              id="nav-submissions"
+              class="w-full flex items-center gap-3.5 text-slate-400 hover:text-white hover:bg-white/5 px-4 py-3.5 rounded-2xl font-semibold text-sm transition"
+            >
+              <i data-lucide="bot" class="w-5 h-5"></i>
+              <span>AI Submissions Audit</span>
+            </button>
+          </nav>
+        </div>
+
+        <div class="pt-6 border-t border-white/5">
+          <button
+            onclick="logout()"
+            class="w-full flex items-center justify-center gap-2 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 py-3 rounded-2xl text-xs font-bold border border-rose-500/20 transition"
+          >
+            <i data-lucide="log-out" class="w-4 h-4"></i>
+            <span>Sign Out</span>
+          </button>
+        </div>
+      </aside>
+
+      <!-- Main Workspace -->
+      <main class="flex-1 flex flex-col h-full overflow-y-auto p-6 pl-2">
+        <header
+          class="glass-card px-8 py-4 rounded-3xl mb-6 flex justify-between items-center border border-white/5"
+        >
+          <div>
+            <h1 class="text-xl font-black text-white" id="welcome-user">
+              Welcome Back
+            </h1>
+            <p class="text-xs text-slate-400">
+              AI Agent Cloud & Execution Phase
+            </p>
+          </div>
+          <div class="flex items-center gap-3">
+            <span
+              class="inline-flex items-center gap-2 text-xs font-bold bg-orange-500/10 text-orange-400 border border-orange-500/20 px-4 py-2 rounded-full"
+            >
+              <span
+                class="w-2 h-2 rounded-full bg-orange-500 animate-ping"
+              ></span>
+              AI & Data Science Faculty
+            </span>
+          </div>
+        </header>
+
+        <div class="space-y-6 pr-2">
+          <!-- TASKS TAB -->
+          <div id="tasks-tab-content" class="space-y-6">
+            <!-- Analytics Summary Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div
+                class="glass-card p-5 rounded-2xl flex items-center justify-between"
+                data-tilt
+                data-tilt-max="4"
+              >
+                <div>
+                  <p
+                    class="text-xs font-bold uppercase tracking-wider text-slate-400"
+                  >
+                    Total Tasks
+                  </p>
+                  <h4
+                    id="stat-total"
+                    class="text-2xl font-black text-white mt-1"
+                  >
+                    0
+                  </h4>
+                </div>
+                <div
+                  class="p-3 rounded-xl bg-orange-500/10 text-orange-400 border border-orange-500/20"
+                >
+                  <i data-lucide="layers" class="w-6 h-6"></i>
+                </div>
+              </div>
+
+              <div
+                class="glass-card p-5 rounded-2xl flex items-center justify-between"
+                data-tilt
+                data-tilt-max="4"
+              >
+                <div>
+                  <p
+                    class="text-xs font-bold uppercase tracking-wider text-slate-400"
+                  >
+                    Pending
+                  </p>
+                  <h4
+                    id="stat-pending"
+                    class="text-2xl font-black text-amber-400 mt-1"
+                  >
+                    0
+                  </h4>
+                </div>
+                <div
+                  class="p-3 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20"
+                >
+                  <i data-lucide="clock" class="w-6 h-6"></i>
+                </div>
+              </div>
+
+              <div
+                class="glass-card p-5 rounded-2xl flex items-center justify-between"
+                data-tilt
+                data-tilt-max="4"
+              >
+                <div>
+                  <p
+                    class="text-xs font-bold uppercase tracking-wider text-slate-400"
+                  >
+                    Completed
+                  </p>
+                  <h4
+                    id="stat-completed"
+                    class="text-2xl font-black text-emerald-400 mt-1"
+                  >
+                    0
+                  </h4>
+                </div>
+                <div
+                  class="p-3 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
+                >
+                  <i data-lucide="check-circle" class="w-6 h-6"></i>
+                </div>
+              </div>
+
+              <div
+                class="glass-card p-5 rounded-2xl flex items-center justify-between"
+                data-tilt
+                data-tilt-max="4"
+              >
+                <div>
+                  <p
+                    class="text-xs font-bold uppercase tracking-wider text-slate-400"
+                  >
+                    Team Members
+                  </p>
+                  <h4
+                    id="stat-users"
+                    class="text-2xl font-black text-blue-400 mt-1"
+                  >
+                    0
+                  </h4>
+                </div>
+                <div
+                  class="p-3 rounded-xl bg-blue-500/10 text-blue-400 border border-blue-500/20"
+                >
+                  <i data-lucide="users" class="w-6 h-6"></i>
+                </div>
+              </div>
+            </div>
+
+            <!-- Create New Task Form -->
+            <div
+              class="glass-card p-8 rounded-3xl border border-white/5"
+              data-tilt
+              data-tilt-max="2"
+              data-tilt-glare="false"
+            >
+              <div class="flex items-center gap-3 mb-6">
+                <div
+                  class="p-2.5 rounded-xl bg-orange-500/10 text-orange-400 border border-orange-500/20"
+                >
+                  <i data-lucide="plus-circle" class="w-5 h-5"></i>
+                </div>
+                <h3 class="text-lg font-bold text-white">
+                  Create New Task & Send Email
+                </h3>
+              </div>
+
+              <form
+                id="task-form"
+                class="grid grid-cols-1 md:grid-cols-3 gap-5"
+              >
+                <div>
+                  <label class="block text-xs font-bold text-slate-400 mb-2"
+                    >Task Title</label
+                  >
+                  <input
+                    type="text"
+                    id="title"
+                    required
+                    placeholder="e.g. Model Architecture"
+                    class="w-full glass-input rounded-2xl px-4 py-3 text-sm text-white focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-slate-400 mb-2"
+                    >Deadline</label
+                  >
+                  <input
+                    type="datetime-local"
+                    id="deadline"
+                    required
+                    class="w-full glass-input rounded-2xl px-4 py-3 text-sm text-white focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-slate-400 mb-2"
+                    >Priority</label
+                  >
+                  <select
+                    id="priority"
+                    class="w-full glass-input rounded-2xl px-4 py-3 text-sm text-white focus:outline-none bg-gray-900"
+                  >
+                    <option value="Low" class="bg-gray-900">
+                      Low Priority
+                    </option>
+                    <option value="Medium" selected class="bg-gray-900">
+                      Medium Priority
+                    </option>
+                    <option value="High" class="bg-gray-900">
+                      High Priority
+                    </option>
+                  </select>
+                </div>
+
+                <!-- خانة اختيار العضو المسؤول وإرسال الإيميل -->
+                <div class="md:col-span-3">
+                  <label class="block text-xs font-bold text-slate-400 mb-2"
+                    >Assign To Team Member (Email Notification)</label
+                  >
+                  <select
+                    id="assigned_to"
+                    required
+                    class="w-full glass-input rounded-2xl px-4 py-3 text-sm text-white focus:outline-none bg-gray-900"
+                  >
+                    <option value="">Select team member...</option>
+                  </select>
+                </div>
+
+                <div class="md:col-span-3">
+                  <label class="block text-xs font-bold text-slate-400 mb-2"
+                    >Task Description</label
+                  >
+                  <textarea
+                    id="description"
+                    rows="2"
+                    placeholder="Provide instructions or links for this work package..."
+                    class="w-full glass-input rounded-2xl px-4 py-3 text-sm text-white focus:outline-none"
+                  ></textarea>
+                </div>
+                <div class="md:col-span-3">
+                  <button
+                    type="submit"
+                    class="w-full bg-gradient-to-r from-orange-600 to-amber-500 hover:from-orange-500 hover:to-amber-400 text-white font-bold py-3.5 px-6 rounded-2xl transition neon-glow text-sm flex items-center justify-center gap-2"
+                  >
+                    <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+                    <span>Assign & Publish Task (Sends Email Alert)</span>
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            <!-- Active Deliverables Table -->
+            <div
+              class="glass-card rounded-3xl border border-white/5 overflow-hidden"
+            >
+              <div
+                class="p-6 border-b border-white/5 flex justify-between items-center"
+              >
+                <h3
+                  class="text-base font-bold text-white flex items-center gap-2"
+                >
+                  <i
+                    data-lucide="list-todo"
+                    class="w-5 h-5 text-orange-400"
+                  ></i>
+                  Active Deliverables
+                </h3>
+              </div>
+              <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                  <thead>
+                    <tr
+                      class="bg-white/5 text-slate-400 text-xs font-bold uppercase tracking-wider"
+                    >
+                      <th class="p-4 pl-6">Deliverable Title</th>
+                      <th class="p-4">Assigned To</th>
+                      <th class="p-4">Description</th>
+                      <th class="p-4">Priority</th>
+                      <th class="p-4">Deadline</th>
+                      <th class="p-4">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody
+                    id="tasks-table-body"
+                    class="divide-y divide-white/5 text-sm text-slate-300"
+                  ></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- TEAM TAB -->
+          <div id="team-tab-content" class="hidden space-y-6">
+            <div
+              class="glass-card rounded-3xl border border-white/5 overflow-hidden"
+            >
+              <div class="p-6 border-b border-white/5">
+                <h3
+                  class="text-base font-bold text-white flex items-center gap-2"
+                >
+                  <i
+                    data-lucide="shield-check"
+                    class="w-5 h-5 text-orange-400"
+                  ></i>
+                  Team Access & Credentials
+                </h3>
+              </div>
+              <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                  <thead>
+                    <tr
+                      class="bg-white/5 text-slate-400 text-xs font-bold uppercase tracking-wider"
+                    >
+                      <th class="p-4 pl-6">Member Name</th>
+                      <th class="p-4">Role</th>
+                      <th class="p-4">Email</th>
+                      <th class="p-4">Invitation Code</th>
+                      <th class="p-4">Created Date</th>
+                    </tr>
+                  </thead>
+                  <tbody
+                    id="team-table-body"
+                    class="divide-y divide-white/5 text-sm text-slate-300"
+                  ></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- SUBMISSIONS TAB -->
+          <div id="submissions-tab-content" class="hidden space-y-6">
+            <div class="glass-card p-8 rounded-3xl border border-white/5">
+              <div class="flex items-center gap-3 mb-6">
+                <div
+                  class="p-2.5 rounded-xl bg-orange-500/10 text-orange-400 border border-orange-500/20"
+                >
+                  <i data-lucide="bot" class="w-5 h-5"></i>
+                </div>
+                <h3 class="text-lg font-bold text-white">
+                  AI Agent Deliverable Submission & Audit
+                </h3>
+              </div>
+
+              <form
+                id="submission-form"
+                class="grid grid-cols-1 md:grid-cols-2 gap-5"
+              >
+                <div>
+                  <label class="block text-xs font-bold text-slate-400 mb-2"
+                    >Select Task</label
+                  >
+                  <select
+                    id="sub-task-id"
+                    required
+                    class="w-full glass-input rounded-2xl px-4 py-3 text-sm text-white focus:outline-none bg-gray-900"
+                  ></select>
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-slate-400 mb-2"
+                    >GitHub / Cloud Repository Link</label
+                  >
+                  <input
+                    type="text"
+                    id="sub-content"
+                    required
+                    placeholder="https://github.com/username/project"
+                    class="w-full glass-input rounded-2xl px-4 py-3 text-sm text-white focus:outline-none"
+                  />
+                </div>
+                <div class="md:col-span-2">
+                  <button
+                    type="submit"
+                    class="w-full bg-gradient-to-r from-orange-600 to-amber-500 hover:from-orange-500 hover:to-amber-400 text-white font-bold py-3.5 px-6 rounded-2xl transition neon-glow text-sm flex items-center justify-center gap-2"
+                  >
+                    <i data-lucide="sparkles" class="w-4 h-4"></i>
+                    <span>Submit & Trigger AI Agent Verification</span>
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            <div
+              class="glass-card rounded-3xl border border-white/5 overflow-hidden"
+            >
+              <div class="p-6 border-b border-white/5">
+                <h3
+                  class="text-base font-bold text-white flex items-center gap-2"
+                >
+                  <i
+                    data-lucide="check-circle-2"
+                    class="w-5 h-5 text-orange-400"
+                  ></i>
+                  AI Audited Submissions Log
+                </h3>
+              </div>
+              <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                  <thead>
+                    <tr
+                      class="bg-white/5 text-slate-400 text-xs font-bold uppercase tracking-wider"
+                    >
+                      <th class="p-4 pl-6">Task Title</th>
+                      <th class="p-4">Submitted By</th>
+                      <th class="p-4">Repository Link</th>
+                      <th class="p-4">AI Audit Status</th>
+                      <th class="p-4">Timestamp</th>
+                    </tr>
+                  </thead>
+                  <tbody
+                    id="submissions-table-body"
+                    class="divide-y divide-white/5 text-sm text-slate-300"
+                  ></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+      const API_URL = "http://127.0.0.1:8000";
+      lucide.createIcons();
+
+      async function checkServer() {
+        const statusEl = document.getElementById("server-status");
+        try {
+          const res = await fetch(`${API_URL}/`);
+          if (res.ok) {
+            statusEl.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-500"></span> AI Server Connected ✅`;
+            statusEl.className =
+              "text-xs text-emerald-400 font-semibold flex items-center gap-2 pt-2";
+          } else {
+            throw new Error();
+          }
+        } catch (err) {
+          statusEl.innerHTML = `<span class="w-2 h-2 rounded-full bg-rose-500"></span> Server Offline ❌`;
+          statusEl.className =
+            "text-xs text-rose-500 font-semibold flex items-center gap-2 pt-2";
+        }
+      }
+
+      async function loadTeamMembersDropdown() {
+        try {
+          const res = await fetch(`${API_URL}/users/`);
+          const users = await res.json();
+          const select = document.getElementById("assigned_to");
+          select.innerHTML = '<option value="">Select team member...</option>';
+          users.forEach((u) => {
+            const opt = document.createElement("option");
+            opt.value = u.user_id;
+            opt.textContent = `${u.name} (${u.role}) - ${u.email || "No Email"}`;
+            opt.className = "bg-gray-900 text-white";
+            select.appendChild(opt);
+          });
+        } catch (err) {
+          console.error("Error loading team members dropdown:", err);
+        }
+      }
+
+      document
+        .getElementById("login-form")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const code = document.getElementById("invitation-code").value.trim();
+          const errorMsg = document.getElementById("error-msg");
+
+          try {
+            const res = await fetch(`${API_URL}/login`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ user_code: code }),
+            });
+
+            if (res.ok) {
+              const data = await res.json();
+              localStorage.setItem("currentUser", JSON.stringify(data.user));
+              showDashboard(data.user);
+            } else {
+              errorMsg.classList.remove("hidden");
+            }
+          } catch (err) {
+            errorMsg.classList.remove("hidden");
+          }
+        });
+
+      function showDashboard(user) {
+        document.getElementById("login-section").classList.add("hidden");
+        document.getElementById("dashboard-section").classList.remove("hidden");
+        document.getElementById("welcome-user").innerText =
+          `Welcome, ${user.username}`;
+        document.getElementById("user-role-badge").innerText =
+          `${user.role} Access`;
+        fetchTasks();
+        fetchStats();
+        loadTeamMembersDropdown();
+        lucide.createIcons();
+      }
+
+      function logout() {
+        localStorage.removeItem("currentUser");
+        document.getElementById("dashboard-section").classList.add("hidden");
+        document.getElementById("login-section").classList.remove("hidden");
+      }
+
+      function switchTab(tab) {
+        const tasksTab = document.getElementById("tasks-tab-content");
+        const teamTab = document.getElementById("team-tab-content");
+        const subTab = document.getElementById("submissions-tab-content");
+
+        const navTasks = document.getElementById("nav-tasks");
+        const navTeam = document.getElementById("nav-team");
+        const navSub = document.getElementById("nav-submissions");
+
+        const activeClass =
+          "w-full flex items-center gap-3.5 bg-gradient-to-r from-orange-600 to-amber-500 text-white px-4 py-3.5 rounded-2xl font-bold text-sm shadow-lg shadow-orange-600/20 transition";
+        const inactiveClass =
+          "w-full flex items-center gap-3.5 text-slate-400 hover:text-white hover:bg-white/5 px-4 py-3.5 rounded-2xl font-semibold text-sm transition";
+
+        tasksTab.classList.add("hidden");
+        teamTab.classList.add("hidden");
+        subTab.classList.add("hidden");
+
+        navTasks.className = inactiveClass;
+        navTeam.className = inactiveClass;
+        navSub.className = inactiveClass;
+
+        if (tab === "tasks") {
+          tasksTab.classList.remove("hidden");
+          navTasks.className = activeClass;
+          fetchStats();
+          fetchTasks();
+        } else if (tab === "team") {
+          teamTab.classList.remove("hidden");
+          navTeam.className = activeClass;
+          fetchTeamMembers();
+        } else if (tab === "submissions") {
+          subTab.classList.remove("hidden");
+          navSub.className = activeClass;
+          loadTaskDropdown();
+          fetchSubmissions();
+        }
+        lucide.createIcons();
+      }
+
+      async function fetchStats() {
+        try {
+          const res = await fetch(`${API_URL}/stats/`);
+          const stats = await res.json();
+          document.getElementById("stat-total").innerText = stats.total_tasks;
+          document.getElementById("stat-pending").innerText =
+            stats.pending_tasks;
+          document.getElementById("stat-completed").innerText =
+            stats.completed_tasks;
+          document.getElementById("stat-users").innerText = stats.total_users;
+        } catch (err) {
+          console.error("Error fetching stats:", err);
+        }
+      }
+
+      async function fetchTasks() {
+        try {
+          const res = await fetch(`${API_URL}/tasks/`);
+          const tasks = await res.json();
+          const tbody = document.getElementById("tasks-table-body");
+          tbody.innerHTML = "";
+
+          if (tasks.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-slate-500">No deliverables recorded yet.</td></tr>`;
+            return;
+          }
+
+          tasks.forEach((task) => {
+            let badge = "";
+            if (task.priority === "High")
+              badge =
+                '<span class="bg-rose-500/10 text-rose-400 px-3 py-1 rounded-full text-xs font-bold border border-rose-500/20">High</span>';
+            else if (task.priority === "Medium")
+              badge =
+                '<span class="bg-amber-500/10 text-amber-400 px-3 py-1 rounded-full text-xs font-bold border border-amber-500/20">Medium</span>';
+            else
+              badge =
+                '<span class="bg-emerald-500/10 text-emerald-400 px-3 py-1 rounded-full text-xs font-bold border border-emerald-500/20">Low</span>';
+
+            let statusBadge =
+              task.status === "Completed"
+                ? '<span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-3 py-1 rounded-full text-xs font-semibold">Completed</span>'
+                : '<span class="bg-blue-500/10 text-blue-400 border border-blue-500/20 px-3 py-1 rounded-full text-xs font-semibold">Pending</span>';
+
+            tbody.innerHTML += `
+                <tr class="hover:bg-white/5 transition">
+                    <td class="p-4 pl-6 font-bold text-white">${task.title}</td>
+                    <td class="p-4 text-amber-400 font-semibold">${task.assigned_to_name || "Unassigned"}</td>
+                    <td class="p-4 text-slate-400 max-w-xs truncate">${task.description || "No description"}</td>
+                    <td class="p-4">${badge}</td>
+                    <td class="p-4 text-slate-400">${task.deadline ? new Date(task.deadline).toLocaleString() : "-"}</td>
+                    <td class="p-4">${statusBadge}</td>
+                </tr>
+            `;
+          });
+        } catch (err) {
+          console.error("Error fetching tasks:", err);
+        }
+      }
+
+      async function fetchTeamMembers() {
+        try {
+          const res = await fetch(`${API_URL}/users/`);
+          const users = await res.json();
+          const tbody = document.getElementById("team-table-body");
+          tbody.innerHTML = "";
+
+          users.forEach((user) => {
+            let roleBadge =
+              user.role === "Leader"
+                ? '<span class="bg-orange-500/10 text-orange-400 border border-orange-500/20 px-3 py-1 rounded-full text-xs font-bold">Leader</span>'
+                : '<span class="bg-blue-500/10 text-blue-400 border border-blue-500/20 px-3 py-1 rounded-full text-xs font-bold">Member</span>';
+
+            tbody.innerHTML += `
+                <tr class="hover:bg-white/5 transition">
+                    <td class="p-4 pl-6 font-bold text-white">${user.name}</td>
+                    <td class="p-4">${roleBadge}</td>
+                    <td class="p-4 font-mono text-slate-300 text-xs">${user.email || "N/A"}</td>
+                    <td class="p-4 font-mono text-orange-400 font-semibold">${user.user_code}</td>
+                    <td class="p-4 text-slate-400">${user.created_at ? new Date(user.created_at).toLocaleString() : "-"}</td>
+                </tr>
+            `;
+          });
+        } catch (err) {
+          console.error("Error fetching team members:", err);
+        }
+      }
+
+      async function loadTaskDropdown() {
+        try {
+          const res = await fetch(`${API_URL}/tasks/`);
+          const tasks = await res.json();
+          const select = document.getElementById("sub-task-id");
+          select.innerHTML = "";
+          tasks.forEach((t) => {
+            select.innerHTML += `<option value="${t.task_id}" class="bg-gray-900">${t.title} (${t.status})</option>`;
+          });
+        } catch (err) {
+          console.error("Error loading task dropdown:", err);
+        }
+      }
+
+      async function fetchSubmissions() {
+        try {
+          const res = await fetch(`${API_URL}/submissions/`);
+          const subs = await res.json();
+          const tbody = document.getElementById("submissions-table-body");
+          tbody.innerHTML = "";
+
+          if (subs.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="5" class="p-8 text-center text-slate-500">No submissions audited yet.</td></tr>`;
+            return;
+          }
+
+          subs.forEach((sub) => {
+            tbody.innerHTML += `
+                <tr class="hover:bg-white/5 transition">
+                    <td class="p-4 pl-6 font-bold text-white">${sub.task_title}</td>
+                    <td class="p-4 text-orange-400 font-semibold">${sub.user_name}</td>
+                    <td class="p-4 text-slate-300 font-mono"><a href="${sub.content}" target="_blank" class="underline hover:text-orange-400">${sub.content}</a></td>
+                    <td class="p-4"><span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-3 py-1 rounded-full text-xs font-bold inline-flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> AI Verified ✅</span></td>
+                    <td class="p-4 text-slate-400">${sub.submitted_at ? new Date(sub.submitted_at).toLocaleString() : "-"}</td>
+                </tr>
+            `;
+          });
+        } catch (err) {
+          console.error("Error fetching submissions:", err);
+        }
+      }
+
+      document
+        .getElementById("task-form")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const newTask = {
+            title: document.getElementById("title").value,
+            description: document.getElementById("description").value,
+            deadline: document.getElementById("deadline").value,
+            priority: document.getElementById("priority").value,
+            assigned_to: parseInt(document.getElementById("assigned_to").value),
+          };
+
+          try {
+            const res = await fetch(`${API_URL}/tasks/`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(newTask),
+            });
+
+            if (res.ok) {
+              alert("Task created successfully & email notification sent!");
+              document.getElementById("task-form").reset();
+              fetchTasks();
+              fetchStats();
+            } else {
+              const errData = await res.json();
+              alert("Error: " + errData.detail);
+            }
+          } catch (err) {
+            alert("Failed to connect to server.");
+          }
+        });
+
+      document
+        .getElementById("submission-form")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
+          const newSub = {
+            task_id: parseInt(document.getElementById("sub-task-id").value),
+            user_id: currentUser.user_id,
+            content: document.getElementById("sub-content").value,
+          };
+
+          const res = await fetch(`${API_URL}/submissions/`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(newSub),
+          });
+
+          if (res.ok) {
+            document.getElementById("submission-form").reset();
+            fetchSubmissions();
+            fetchTasks();
+            fetchStats();
+          }
+        });
+
+      checkServer();
+
+      const savedUser = localStorage.getItem("currentUser");
+      if (savedUser) {
+        showDashboard(JSON.parse(savedUser));
+      }
+    </script>
+  </body>
+</html>
