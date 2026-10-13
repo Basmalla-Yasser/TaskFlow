@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="en" class="dark">
   <head>
@@ -788,22 +787,28 @@
         });
 
       function showDashboard(user) {
-        // التحقق من الصلاحيات: Leader أو Supervisor فقط يفتحون الداشبورد الكبيرة
+        document.getElementById("login-section").classList.add("hidden");
+        document.getElementById("dashboard-section").classList.remove("hidden");
+        document.getElementById("welcome-user").innerText = `Welcome, ${user.username}`;
+        document.getElementById("user-role-badge").innerText = `${user.role} Access`;
+
+        // إعادة إظهار الأزرار افتراضياً
+        document.getElementById("nav-tasks").classList.remove("hidden");
+        document.getElementById("nav-team").classList.remove("hidden");
+
         if (user.role === "Leader" || user.role === "Supervisor") {
-          document.getElementById("login-section").classList.add("hidden");
-          document.getElementById("dashboard-section").classList.remove("hidden");
-          document.getElementById("welcome-user").innerText =
-            `Welcome, ${user.username}`;
-          document.getElementById("user-role-badge").innerText =
-            `${user.role} Access`;
+          // فتح الداشبورد الكبيرة ورؤية باقي الأقسام
           fetchTasks();
           fetchStats();
           loadTeamMembersDropdown();
-          lucide.createIcons();
+          switchTab("tasks");
         } else {
-          // باقي الأعضاء (مثل مريم) يتم توجيههم لصفحة تسليم التاسكات فقط
-          window.location.href = "submit_task.html";
+          // العضو العادي (member): إخفاء أزرار التحكم وعرض شاشة تسليم التاسكات فوراً
+          document.getElementById("nav-tasks").classList.add("hidden");
+          document.getElementById("nav-team").classList.add("hidden");
+          switchTab("submissions");
         }
+        lucide.createIcons();
       }
 
       function logout() {
