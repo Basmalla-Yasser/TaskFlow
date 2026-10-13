@@ -1,5 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse  # <--- حطيه هنا مع الباقي
 from pydantic import BaseModel
 import psycopg2
 import smtplib
@@ -82,8 +83,7 @@ def send_email_to_user(to_email: str, task_title: str, deadline: str, descriptio
 # Endpoints
 @app.get("/")
 def read_root():
-    return {"message": "TaskFlow Supabase API is running successfully with Email Notifications!"}
-
+    return FileResponse("index.html")
 @app.post("/login")
 def login(data: LoginRequest):
     try:
