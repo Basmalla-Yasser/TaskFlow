@@ -787,27 +787,22 @@
         });
 
       function showDashboard(user) {
+        // حماية أمنية قوية: إذا لم يكن المستخدم Leader أو Supervisor يتم منعه تماماً من دخول الداشبورد
+        if (user.role !== "Leader" && user.role !== "Supervisor") {
+          alert("عذراً، هذه الصلاحية مخصصة للقادة والمشرفين فقط.");
+          logout();
+          return;
+        }
+
         document.getElementById("login-section").classList.add("hidden");
         document.getElementById("dashboard-section").classList.remove("hidden");
         document.getElementById("welcome-user").innerText = `Welcome, ${user.username}`;
         document.getElementById("user-role-badge").innerText = `${user.role} Access`;
-
-        // إعادة إظهار الأزرار افتراضياً
-        document.getElementById("nav-tasks").classList.remove("hidden");
-        document.getElementById("nav-team").classList.remove("hidden");
-
-        if (user.role === "Leader" || user.role === "Supervisor") {
-          // فتح الداشبورد الكبيرة ورؤية باقي الأقسام
-          fetchTasks();
-          fetchStats();
-          loadTeamMembersDropdown();
-          switchTab("tasks");
-        } else {
-          // العضو العادي (member): إخفاء أزرار التحكم وعرض شاشة تسليم التاسكات فوراً
-          document.getElementById("nav-tasks").classList.add("hidden");
-          document.getElementById("nav-team").classList.add("hidden");
-          switchTab("submissions");
-        }
+        
+        fetchTasks();
+        fetchStats();
+        loadTeamMembersDropdown();
+        switchTab("tasks");
         lucide.createIcons();
       }
 
