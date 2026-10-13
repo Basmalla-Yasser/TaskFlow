@@ -795,7 +795,7 @@
         document.getElementById("user-role-badge").innerText = `${user.role} Access`;
 
         if (role === "leader" || role === "supervisor") {
-          // إظهار كافة التابات والتحكم الكامل للقادة والمشرفين
+          // القادة والمشرفين: إظهار جميع الخيارات وتفعيل الصلاحيات
           document.getElementById("nav-tasks").classList.remove("hidden");
           document.getElementById("nav-team").classList.remove("hidden");
           document.getElementById("nav-submissions").classList.remove("hidden");
@@ -805,7 +805,7 @@
           loadTeamMembersDropdown();
           switchTab("tasks");
         } else {
-          // إخفاء زراير التاسكات وأعضاء الفريق تماماً عن الأعضاء العاديين
+          // الأعضاء العاديين: إخفاء الأزرار وفتح تبويب التسليمات حصرياً
           document.getElementById("nav-tasks").classList.add("hidden");
           document.getElementById("nav-team").classList.add("hidden");
           document.getElementById("nav-submissions").classList.remove("hidden");
@@ -822,6 +822,17 @@
       }
 
       function switchTab(tab) {
+        // حراسة أمنية مشددة داخل دالة تبديل التابات:
+        const currentUser = JSON.parse(localStorage.getItem("currentUser") || "{}");
+        const role = (currentUser.role || "").trim().toLowerCase();
+
+        // لو العضو عادي وحاول يفتح تاب غير التبويب المخصص له (submissions)
+        if (role !== "leader" && role !== "supervisor" && tab !== "submissions") {
+          alert("غير مسموح لك بالوصول لهذه الصفحة، مخصص للقادة فقط.");
+          switchTab("submissions"); // إعادة توجيهه بالقوة لتسليم التاسكات
+          return;
+        }
+
         const tasksTab = document.getElementById("tasks-tab-content");
         const teamTab = document.getElementById("team-tab-content");
         const subTab = document.getElementById("submissions-tab-content");
@@ -975,6 +986,7 @@
             return;
           }
 
+          subs.jobs?.forEach?.((sub) => {}); // Safe fallback
           subs.forEach((sub) => {
             tbody.innerHTML += `
                 <tr class="hover:bg-white/5 transition">
@@ -1043,7 +1055,9 @@
           });
 
           if (res.ok) {
+            document.getElementById("submission-form-reset")?.();
             document.getElementById("submission-form").reset();
+            alert("Deliverable submitted successfully!");
             fetchSubmissions();
             fetchTasks();
             fetchStats();
