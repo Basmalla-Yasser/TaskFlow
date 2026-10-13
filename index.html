@@ -787,23 +787,24 @@
         });
 
       function showDashboard(user) {
-        // حماية أمنية قوية: إذا لم يكن المستخدم Leader أو Supervisor يتم منعه تماماً من دخول الداشبورد
-        if (user.role !== "Leader" && user.role !== "Supervisor") {
-          alert("عذراً، هذه الصلاحية مخصصة للقادة والمشرفين فقط.");
-          logout();
-          return;
-        }
+        const role = (user.role || "").trim().toLowerCase();
 
-        document.getElementById("login-section").classList.add("hidden");
-        document.getElementById("dashboard-section").classList.remove("hidden");
-        document.getElementById("welcome-user").innerText = `Welcome, ${user.username}`;
-        document.getElementById("user-role-badge").innerText = `${user.role} Access`;
-        
-        fetchTasks();
-        fetchStats();
-        loadTeamMembersDropdown();
-        switchTab("tasks");
-        lucide.createIcons();
+        // القادة والمشرفين يفتحون الداشبورد الكاملة
+        if (role === "leader" || role === "supervisor") {
+          document.getElementById("login-section").classList.add("hidden");
+          document.getElementById("dashboard-section").classList.remove("hidden");
+          document.getElementById("welcome-user").innerText = `Welcome, ${user.username}`;
+          document.getElementById("user-role-badge").innerText = `${user.role} Access`;
+          
+          fetchTasks();
+          fetchStats();
+          loadTeamMembersDropdown();
+          switchTab("tasks");
+          lucide.createIcons();
+        } else {
+          // باقي الأعضاء يتم توجيههم لصفحة تسليم التاسكات
+          window.location.href = "submit_task.html";
+        }
       }
 
       function logout() {
