@@ -789,28 +789,27 @@
       function showDashboard(user) {
         const role = (user.role || "").trim().toLowerCase();
 
-        // إظهار الداشبورد والترحيب بالمستخدم
         document.getElementById("login-section").classList.add("hidden");
         document.getElementById("dashboard-section").classList.remove("hidden");
         document.getElementById("welcome-user").innerText = `Welcome, ${user.username}`;
         document.getElementById("user-role-badge").innerText = `${user.role} Access`;
 
         if (role === "leader" || role === "supervisor") {
-          // القادة والمشرفين: إظهار جميع التابات وإتاحة كل الصلاحيات
+          // إظهار كافة التابات والتحكم الكامل للقادة والمشرفين
           document.getElementById("nav-tasks").classList.remove("hidden");
           document.getElementById("nav-team").classList.remove("hidden");
           document.getElementById("nav-submissions").classList.remove("hidden");
-          
+
           fetchTasks();
           fetchStats();
           loadTeamMembersDropdown();
           switchTab("tasks");
         } else {
-          // الأعضاء العاديين (مثل مريم): إخفاء تابات القائد وفتح تبويب التسليمات فقط فوراً جوه نفس الصفحة
+          // إخفاء زراير التاسكات وأعضاء الفريق تماماً عن الأعضاء العاديين
           document.getElementById("nav-tasks").classList.add("hidden");
           document.getElementById("nav-team").classList.add("hidden");
           document.getElementById("nav-submissions").classList.remove("hidden");
-          
+
           switchTab("submissions");
         }
         lucide.createIcons();
@@ -903,8 +902,8 @@
 
             let statusBadge =
               task.status === "Completed"
-                ? '<span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-3 py-1 rounded-full text-xs font-semibold">Completed</span>'
-                : '<span class="bg-blue-500/10 text-blue-400 border border-blue-500/20 px-3 py-1 rounded-full text-xs font-semibold">Pending</span>';
+                ? '<span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-3 py-1 rounded-semibold">Completed</span>'
+                : '<span class="bg-blue-500/10 text-blue-400 border border-blue-500/20 px-3 py-1 rounded-semibold">Pending</span>';
 
             tbody.innerHTML += `
                 <tr class="hover:bg-white/5 transition">
