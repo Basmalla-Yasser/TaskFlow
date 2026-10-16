@@ -103,14 +103,14 @@
     </style>
   </head>
 
-  <body class="h-screen w-screen flex overflow-hidden relative select-none">
+  <body class="min-h-screen w-full flex flex-col relative select-none">
     <div class="ambient-glow-1"></div>
     <div class="ambient-glow-2"></div>
 
     <!-- ================= LOGIN SECTION ================= -->
     <div
       id="login-section"
-      class="flex h-full w-full z-10 relative overflow-y-auto"
+      class="flex min-h-screen w-full z-10 relative overflow-y-auto items-center justify-center"
     >
       <div
         class="max-w-7xl w-full mx-auto flex flex-col lg:flex-row items-center justify-between p-6 lg:p-12 gap-12 my-auto"
@@ -255,11 +255,11 @@
     <!-- ================= DASHBOARD SECTION ================= -->
     <div
       id="dashboard-section"
-      class="hidden flex h-full w-full overflow-hidden z-10"
+      class="hidden flex flex-col lg:flex-row min-h-screen w-full overflow-x-hidden z-10"
     >
       <!-- Sidebar Navigation -->
       <aside
-        class="w-72 flex-shrink-0 glass-card border-r border-white/5 flex flex-col justify-between p-6 m-4 rounded-3xl"
+        class="w-full lg:w-72 flex-shrink-0 glass-card border-b lg:border-r border-white/5 flex flex-col justify-between p-6 lg:m-4 lg:rounded-3xl"
       >
         <div class="space-y-8">
           <div class="flex items-center gap-3.5 px-2">
@@ -306,7 +306,7 @@
           </nav>
         </div>
 
-        <div class="pt-6 border-t border-white/5">
+        <div class="pt-6 border-t border-white/5 mt-6 lg:mt-0">
           <button
             onclick="logout()"
             class="w-full flex items-center justify-center gap-2 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 py-3 rounded-2xl text-xs font-bold border border-rose-500/20 transition"
@@ -318,9 +318,9 @@
       </aside>
 
       <!-- Main Workspace -->
-      <main class="flex-1 flex flex-col h-full overflow-y-auto p-6 pl-2">
+      <main class="flex-1 flex flex-col min-h-screen p-4 lg:p-6 lg:pl-2 overflow-y-auto">
         <header
-          class="glass-card px-8 py-4 rounded-3xl mb-6 flex justify-between items-center border border-white/5"
+          class="glass-card px-6 lg:px-8 py-4 rounded-3xl mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border border-white/5"
         >
           <div>
             <h1 class="text-xl font-black text-white" id="welcome-user">
@@ -342,7 +342,7 @@
           </div>
         </header>
 
-        <div class="space-y-6 pr-2">
+        <div class="space-y-6">
           <!-- TASKS TAB -->
           <div id="tasks-tab-content" class="space-y-6">
             <!-- Analytics Summary Cards -->
@@ -450,7 +450,7 @@
 
             <!-- Create New Task Form -->
             <div
-              class="glass-card p-8 rounded-3xl border border-white/5"
+              class="glass-card p-6 lg:p-8 rounded-3xl border border-white/5"
               data-tilt
               data-tilt-max="2"
               data-tilt-glare="false"
@@ -513,7 +513,6 @@
                   </select>
                 </div>
 
-                <!-- خانة اختيار العضو المسؤول وإرسال الإيميل -->
                 <div class="md:col-span-3">
                   <label class="block text-xs font-bold text-slate-400 mb-2"
                     >Assign To Team Member (Email Notification)</label
@@ -568,7 +567,7 @@
                 </h3>
               </div>
               <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse">
+                <table class="w-full text-left border-collapse min-w-[700px]">
                   <thead>
                     <tr
                       class="bg-white/5 text-slate-400 text-xs font-bold uppercase tracking-wider"
@@ -607,7 +606,7 @@
                 </h3>
               </div>
               <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse">
+                <table class="w-full text-left border-collapse min-w-[700px]">
                   <thead>
                     <tr
                       class="bg-white/5 text-slate-400 text-xs font-bold uppercase tracking-wider"
@@ -630,7 +629,7 @@
 
           <!-- SUBMISSIONS TAB -->
           <div id="submissions-tab-content" class="hidden space-y-6">
-            <div class="glass-card p-8 rounded-3xl border border-white/5">
+            <div class="glass-card p-6 lg:p-8 rounded-3xl border border-white/5">
               <div class="flex items-center gap-3 mb-6">
                 <div
                   class="p-2.5 rounded-xl bg-orange-500/10 text-orange-400 border border-orange-500/20"
@@ -695,7 +694,7 @@
                 </h3>
               </div>
               <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse">
+                <table class="w-full text-left border-collapse min-w-[700px]">
                   <thead>
                     <tr
                       class="bg-white/5 text-slate-400 text-xs font-bold uppercase tracking-wider"
@@ -721,11 +720,12 @@
 
     <!-- Scripts -->
     <script>
-const API_URL = "https://web-production-62bb8.up.railway.app";
+      const API_URL = "https://web-production-62bb8.up.railway.app";
       lucide.createIcons();
 
       async function checkServer() {
         const statusEl = document.getElementById("server-status");
+        if (!statusEl) return;
         try {
           const res = await fetch(`${API_URL}/`);
           if (res.ok) {
@@ -747,6 +747,7 @@ const API_URL = "https://web-production-62bb8.up.railway.app";
           const res = await fetch(`${API_URL}/users/`);
           const users = await res.json();
           const select = document.getElementById("assigned_to");
+          if (!select) return;
           select.innerHTML = '<option value="">Select team member...</option>';
           users.forEach((u) => {
             const opt = document.createElement("option");
@@ -795,7 +796,6 @@ const API_URL = "https://web-production-62bb8.up.railway.app";
         document.getElementById("user-role-badge").innerText = `${user.role} Access`;
 
         if (role === "leader" || role === "supervisor") {
-          // القادة والمشرفين: إظهار جميع الخيارات وتفعيل الصلاحيات
           document.getElementById("nav-tasks").classList.remove("hidden");
           document.getElementById("nav-team").classList.remove("hidden");
           document.getElementById("nav-submissions").classList.remove("hidden");
@@ -805,7 +805,6 @@ const API_URL = "https://web-production-62bb8.up.railway.app";
           loadTeamMembersDropdown();
           switchTab("tasks");
         } else {
-          // الأعضاء العاديين: إخفاء الأزرار وفتح تبويب التسليمات حصرياً
           document.getElementById("nav-tasks").classList.add("hidden");
           document.getElementById("nav-team").classList.add("hidden");
           document.getElementById("nav-submissions").classList.remove("hidden");
@@ -822,14 +821,12 @@ const API_URL = "https://web-production-62bb8.up.railway.app";
       }
 
       function switchTab(tab) {
-        // حراسة أمنية مشددة داخل دالة تبديل التابات:
         const currentUser = JSON.parse(localStorage.getItem("currentUser") || "{}");
         const role = (currentUser.role || "").trim().toLowerCase();
 
-        // لو العضو عادي وحاول يفتح تاب غير التبويب المخصص له (submissions)
         if (role !== "leader" && role !== "supervisor" && tab !== "submissions") {
           alert("غير مسموح لك بالوصول لهذه الصفحة، مخصص للقادة فقط.");
-          switchTab("submissions"); // إعادة توجيهه بالقوة لتسليم التاسكات
+          switchTab("submissions");
           return;
         }
 
@@ -965,6 +962,7 @@ const API_URL = "https://web-production-62bb8.up.railway.app";
           const res = await fetch(`${API_URL}/tasks/`);
           const tasks = await res.json();
           const select = document.getElementById("sub-task-id");
+          if (!select) return;
           select.innerHTML = "";
           tasks.forEach((t) => {
             select.innerHTML += `<option value="${t.task_id}" class="bg-gray-900">${t.title} (${t.status})</option>`;
@@ -986,7 +984,6 @@ const API_URL = "https://web-production-62bb8.up.railway.app";
             return;
           }
 
-          subs.jobs?.forEach?.((sub) => {}); // Safe fallback
           subs.forEach((sub) => {
             tbody.innerHTML += `
                 <tr class="hover:bg-white/5 transition">
@@ -1055,7 +1052,6 @@ const API_URL = "https://web-production-62bb8.up.railway.app";
           });
 
           if (res.ok) {
-            document.getElementById("submission-form-reset")?.();
             document.getElementById("submission-form").reset();
             alert("Deliverable submitted successfully!");
             fetchSubmissions();
