@@ -1,6 +1,5 @@
-from fastapi import FastAPI, HTTPException, Header
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse
 from pydantic import BaseModel
 import psycopg2
 import smtplib
@@ -21,11 +20,11 @@ app.add_middleware(
 # بيانات الاتصال بقاعدة بيانات Supabase أونلاين
 DATABASE_URL = "postgresql://postgres.itpfvgggvxhfioxgkepl:bosy12$5F77@aws-0-eu-west-1.pooler.supabase.com:5432/postgres"
 
-# إعدادات البريد الإلكتروني الخاص بكِ
+# إعدادات البريد الإلكتروني الخاص بكِ (الإيميل المرسِل)
 SMTP_SERVER = "smtp.gmail.com"
 SMTP_PORT = 587
-SENDER_EMAIL = "basmallay30@gmail.com"  
-SENDER_PASSWORD = "fvfx sfga bplv unhv"  
+SENDER_EMAIL = "basmallay30@gmail.com" 
+SENDER_PASSWORD = "fvfx sfga bplv unhv" 
 
 def get_db_connection():
     return psycopg2.connect(DATABASE_URL)
@@ -45,6 +44,12 @@ class SubmissionCreate(BaseModel):
     task_id: int
     user_id: int
     content: str
+
+# Schema جديدة للفيدباك الخاصة بـ DR/Mahmoud
+class FeedbackCreate(BaseModel):
+    task_id: int
+    reviewer_name: str = "DR/Mahmoud"
+    comment: str
 
 # دالة إرسال الإيميل من بريدك الشخصي
 def send_email_to_user(to_email: str, task_title: str, deadline: str, description: str):
@@ -80,10 +85,44 @@ def send_email_to_user(to_email: str, task_title: str, deadline: str, descriptio
         print(f"❌ DETAILED SMTP ERROR: {str(e)}")
         raise e
 
+# دالة إرسال إيميل الفيدباك لصاحب التاسك
+def send_feedback_email(to_email: str, task_title: str, comment: str, reviewer: str):
+    try:
+        msg = MIMEMultipart()
+        msg['From'] = SENDER_EMAIL
+        msg['To'] = to_email
+        msg['Subject'] = f"TaskFlow: Feedback Received from {reviewer} on '{task_title}'"
+
+        body = f"""
+        Hello,
+        
+        You have received feedback from {reviewer} regarding your assigned task: '{task_title}'.
+        
+        Feedback & Notes:
+        ----------------------------------------
+        {comment}
+        ----------------------------------------
+        
+        Please review the notes and update your work accordingly.
+        
+        Best regards,
+        TaskFlow Team
+        """
+        msg.attach(MIMEText(body, 'plain'))
+
+        server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
+        server.starttls()
+        server.login(SENDER_EMAIL, SENDER_PASSWORD)
+        server.sendmail(SENDER_EMAIL, to_email, msg.as_string())
+        server.quit()
+        print("✅ FEEDBACK EMAIL SENT SUCCESSFULLY!")
+    except Exception as e:
+        print(f"❌ SMTP ERROR: {str(e)}")
+
 # Endpoints
 @app.get("/")
 def read_root():
-    return FileResponse("index.html")
+    return {"message": "TaskFlow Supabase API is running successfully with Email Notifications!"}
 
 @app.post("/login")
 def login(data: LoginRequest):
@@ -168,21 +207,18 @@ def create_task(task: TaskCreate):
     conn = get_db_connection()
     cursor = conn.cursor()
     
-    # حفظ التاسك في قاعدة البيانات
     cursor.execute(
         "INSERT INTO tasks (title, description, priority, deadline, status, assigned_to) VALUES (%s, %s, %s, %s, 'Pending', %s) RETURNING task_id",
         (task.title, task.description, task.priority, task.deadline, task.assigned_to)
     )
     task_id = cursor.fetchone()[0]
     
-    # جلب إيميل العضو المسؤول
     cursor.execute("SELECT email, name FROM users WHERE user_id = %s", (task.assigned_to,))
     user_row = cursor.fetchone()
     
     conn.commit()
     conn.close()
 
-    # إرسال الإيميل بشكل آمن من بريدك الشخصي
     try:
         if user_row and user_row[0]:
             user_email = user_row[0]
@@ -258,20 +294,58 @@ def get_submissions():
     conn.close()
     return subs_list
 
-# مسار الفحص الذكي للـ AI Agent للتاكد من صلاحية رابط المشروع
-@app.post("/ai-audit/")
-def ai_audit_submission(data: dict):
-    repo_link = data.get("content", "")
+# Endpoint لإضافة الفيدباك وإرسال الإيميل تلقائيًا لصاحب التاسك
+@app.post("/feedbacks/")
+def create_feedback(fb: FeedbackCreate):
+    conn = get_db_connection()
+    cursor = conn.cursor()
     
-    if "github.com" in repo_link:
-        audit_result = "AI Agent Analysis: Repository structure is valid. Clean code practices detected. Verified ✅"
-        status = "Verified"
-    else:
-        audit_result = "AI Agent Analysis: Warning - Link does not point to a recognized code repository. Review required ⚠️"
-        status = "Needs Review"
-        
-    return {
-        "status": "success",
-        "audit_result": audit_result,
-        "audit_status": status
-    }
+    cursor.execute(
+        "INSERT INTO feedbacks (task_id, reviewer_name, comment) VALUES (%s, %s, %s)",
+        (fb.task_id, fb.reviewer_name, fb.comment)
+    )
+    
+    cursor.execute("""
+        SELECT u.email, t.title 
+        FROM tasks t
+        JOIN users u ON t.assigned_to = u.user_id
+        WHERE t.task_id = %s
+    """, (fb.task_id,))
+    row = cursor.fetchone()
+    
+    conn.commit()
+    conn.close()
+
+    if row and row[0]:
+        user_email = row[0]
+        task_title = row[1]
+        try:
+            send_feedback_email(user_email, task_title, fb.comment, fb.reviewer_name)
+        except Exception as mail_err:
+            print(f"⚠️ Email warning: {mail_err}")
+
+    return {"status": "success", "message": "Feedback saved and email sent successfully!"}
+
+# Endpoint لجلب كل الفيدباك لعرضها في اللوحة
+@app.get("/feedbacks/")
+def get_feedbacks():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("""
+        SELECT f.feedback_id, t.title, f.reviewer_name, f.comment, f.created_at 
+        FROM feedbacks f
+        JOIN tasks t ON f.task_id = t.task_id
+        ORDER BY f.created_at DESC
+    """)
+    rows = cursor.fetchall()
+    feedbacks_list = []
+    for row in rows:
+        feedbacks_list.append({
+            "feedback_id": row[0],
+            "task_title": row[1],
+            "reviewer_name": row[2],
+            "comment": row[3],
+            "created_at": str(row[4]) if row[4] else None
+        })
+    conn.close()
+    return feedbacks_list
