@@ -24,7 +24,7 @@ DATABASE_URL = "postgresql://postgres.itpfvgggvxhfioxgkepl:bosy12$5F77@aws-0-eu-
 SMTP_SERVER = "smtp.gmail.com"
 SMTP_PORT = 587
 SENDER_EMAIL = "basmallay30@gmail.com" 
-SENDER_PASSWORD = "fvfx sfga bplv unhv" 
+SENDER_PASSWORD = "ljyb pnvo uoun yzkx" 
 
 def get_db_connection():
     return psycopg2.connect(DATABASE_URL)
