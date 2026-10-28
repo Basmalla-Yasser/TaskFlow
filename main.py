@@ -341,14 +341,4 @@ def get_feedbacks():
         })
     conn.close()
     return feedbacks_list
-```[cite: 4, 5]
 
-### الطريقة:
-1. انسخي الكود ده كله وحطيه جوه ملف `main.py` واعملي `Ctrl + S` للحفظ[cite: 4, 5].
-2. جربي ابعتي تاسك من الموقع، هتلاقي الاستجابة بقت فورية، والإيميل هيوصل في الإنبوكس وصح بنسبة 100% إن شاء الله![cite: 4, 5]
-
-<FollowUp>
-<SuggestedQueries>
-<Button title="تم الحفظ، والسيرفر والإيميل شغالين زي الفل! 🎉"/>
-</SuggestedQueries>
-</FollowUp>
