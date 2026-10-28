@@ -751,7 +751,8 @@
 
     <!-- Scripts -->
     <script>
-      const API_URL = "https://web-production-62bb8.up.railway.app";
+      // تم التعديل للربط بالسيرفر المحلي مباشرة
+      const API_URL = "http://127.0.0.1:8000";
       lucide.createIcons();
 
       async function checkServer() {
@@ -968,7 +969,6 @@
           const res = await fetch(`${API_URL}/tasks/`);
           const tasks = await res.json();
           
-          // تعبئة قائمة الـ Submissions
           const selectSub = document.getElementById("sub-task-id");
           if (selectSub) {
             selectSub.innerHTML = "";
@@ -977,7 +977,6 @@
             });
           }
 
-          // تعبئة قائمة الفيدباك الخاصة بـ DR/Mahmoud
           const selectFb = document.getElementById("fb-task-id");
           if (selectFb) {
             selectFb.innerHTML = "";
@@ -1077,7 +1076,6 @@
           }
         });
 
-      // كود إرسال الفيدباك بواسطة DR/Mahmoud
       document
         .getElementById("feedback-form")
         .addEventListener("submit", async (e) => {
